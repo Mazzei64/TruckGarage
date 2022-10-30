@@ -180,3 +180,7 @@ src/*~
 src/*.dbmdl
 src/*.dbproj.schemaview
 src/*.pfxsrc/
+
+#vs code
+
+src/.vscode/*
