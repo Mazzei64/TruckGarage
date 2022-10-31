@@ -7,8 +7,8 @@ namespace TruckGarage.Entity {
         [Required]
         public string modelo { get; set; } = string.Empty;
         [Required]
-        public DateTime anoFabricacao { get; set; }
+        public DateOnly anoFabricacao { get; set; }
         [Required]
-        public DateTime anoModelo { get; set; }
+        public DateOnly anoModelo { get; set; }
     }
 }
