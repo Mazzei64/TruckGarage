@@ -1,5 +1,6 @@
 global using TruckGarage.Data;
 using Microsoft.EntityFrameworkCore;
+using TruckGarage.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<DataContext>( options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<ITruckService, TruckService>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

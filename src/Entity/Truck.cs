@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TruckGarage.Entity {
     public class Truck {
-        [Required]
+        [Key,Required]
         public int Id { get; set; }
         [Required]
         public string modelo { get; set; } = string.Empty;
