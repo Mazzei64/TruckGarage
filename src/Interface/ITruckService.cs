@@ -7,5 +7,5 @@ public interface ITruckService {
     Task<Truck?> CreateTruckAsync(Truck truck);
     Task<Truck?> FindTruckByIdAsync(long id);
     Task<Truck?> UpdateTruckByIdAsync(long id, Truck truck);
-    Task<Truck?> RemoveTruckByIdAsync(long id);
+    Task<Truck?> RemoveTruckAsync(Truck truck);
 }

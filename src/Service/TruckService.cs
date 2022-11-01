@@ -5,12 +5,14 @@ using TruckGarage.Entity;
 namespace TruckGarage.Service;
 
 public class TruckService : ITruckService {
-    private readonly DataContext _context;
-    public TruckService(DataContext context) {
+    private readonly IDataContext _context;
+    // private readonly DbSet<Truck> truckDb;
+    public TruckService(IDataContext context) {
         this._context = context;
+        _context.truckDb = this._context.Set<Truck>();
     }
     public async Task<List<Truck>?> ListTrucksAsync() {
-        return await _context.truckDb.ToListAsync();
+        return await _context.Set<Truck>().ToListAsync();
     }
     public async Task<Truck?> CreateTruckAsync(Truck truck) {
         await _context.truckDb.AddAsync(truck);
@@ -22,9 +24,6 @@ public class TruckService : ITruckService {
     }
     public async Task<Truck?> UpdateTruckByIdAsync(long id, Truck truck) {
         Truck? dbTruck;
-        if((dbTruck = await this.FindTruckByIdAsync(id)) == null)
-            return null;
-
         dbTruck.modelo = truck.modelo;
         dbTruck.anoFabricacao = truck.anoFabricacao;
         dbTruck.anoModelo = truck.anoModelo;
@@ -33,12 +32,9 @@ public class TruckService : ITruckService {
 
         return dbTruck;
     }
-    public async Task<Truck?> RemoveTruckByIdAsync(long id) {
-        Truck? dbTruck;
-        if((dbTruck = await this.FindTruckByIdAsync(id)) == null)
-            return null;
-        _context.Remove(dbTruck);
+    public async Task<Truck?> RemoveTruckAsync(Truck truck) {
+        _context.Remove(truck);
         await _context.SaveChangesAsync();
-        return dbTruck;
+        return truck;
     }
 }
