@@ -6,9 +6,9 @@ namespace TruckGarage.Entity {
         public int Id { get; set; }
         [Required]
         public string modelo { get; set; } = string.Empty;
+        [Editable(false)]
+        public string anoFabricacao { get; set; } = string.Empty;
         [Required]
-        public DateOnly anoFabricacao { get; set; }
-        [Required]
-        public DateOnly anoModelo { get; set; }
+        public string anoModelo { get; set; } = string.Empty;
     }
 }

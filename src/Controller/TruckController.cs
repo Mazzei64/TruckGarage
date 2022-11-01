@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using TruckGarage.Dto;
+using TruckGarage.Extension;
 using TruckGarage.Entity;
 using TruckGarage.Service;
+using TruckGarage.Dto;
 
 namespace TruckGarage.Controller;
 
@@ -24,51 +25,33 @@ public class TruckController : ControllerBase {
         return Ok(truck);
     }
     [HttpPost]
-    public async Task<ActionResult<Truck>> CreateTruck(TruckDto truckDto) {
-        if(truckDto.modelo == string.Empty) 
+    public async Task<ActionResult<Truck>> CreateTruck(Truck truck) {
+        if(truck.modelo == string.Empty) 
             return BadRequest(new { Error = "Modelo não informado." });
-        Truck truck = new Truck();
-        truck.modelo = truckDto.modelo;
-        try{
-            truck.anoFabricacao = DateOnly.ParseExact(truckDto.anoFabricacao,
-                                                    new[] {
-                                                        "dd/MM/yyyy", "MM/dd/yyyy", "d/MM/yyyy",
-                                                        "MM/d/yyyy", "dd/M/yyyy", "M/dd/yyyy",
-                                                        "M/d/yyyy", "d/M/yyyy"
-                                                    });
-            truck.anoModelo = DateOnly.ParseExact(truckDto.anoModelo,
-                                                    new[] {
-                                                        "dd/MM/yyyy", "MM/dd/yyyy", "d/MM/yyyy",
-                                                        "MM/d/yyyy", "dd/M/yyyy", "M/dd/yyyy",
-                                                        "M/d/yyyy", "d/M/yyyy"
-                                                    });
-        }catch(FormatException) {
-            return BadRequest(new { Error = "Formato de data incompatível." });
-        }
+        if(!truck.modelo.IsFM_FH()) return BadRequest(new { Error = "Tipo do modelo não informado." });
+        truck.anoFabricacao = DateTime.Now.Year.ToString();
+        if(!truck.anoModelo.IsYear()) return BadRequest(new { Error = "Ano do modelo precisam ser do valor de um ano." });
+        if(Int32.Parse(truck.anoModelo) > Int32.Parse(truck.anoFabricacao))
+            return BadRequest(new { Error = "Ano do modelo não pode ser superior ao seu ano de fabricação." });
         return Ok(await truckService.CreateTruckAsync(truck));
     }
     [HttpPut("{id}")]
     public async Task<ActionResult<Truck>> UpdateTruck(int id, TruckDto truckDto) {
-        Truck truck = new Truck();
-        truck.modelo = truckDto.modelo;
-        try{
-            truck.anoFabricacao = DateOnly.ParseExact(truckDto.anoFabricacao,
-                                                    new[] {
-                                                        "dd/MM/yyyy", "MM/dd/yyyy", "d/MM/yyyy",
-                                                        "MM/d/yyyy", "dd/M/yyyy", "M/dd/yyyy",
-                                                        "M/d/yyyy", "d/M/yyyy"
-                                                    });
-            truck.anoModelo = DateOnly.ParseExact(truckDto.anoModelo,
-                                                    new[] {
-                                                        "dd/MM/yyyy", "MM/dd/yyyy", "d/MM/yyyy",
-                                                        "MM/d/yyyy", "dd/M/yyyy", "M/dd/yyyy",
-                                                        "M/d/yyyy", "d/M/yyyy"
-                                                    });
-        }catch(FormatException) {
-            return BadRequest(new { Error = "Formato de data incompatível." });
+        Truck? _truck;
+        if((_truck = await truckService.FindTruckByIdAsync(id)) == null)
+            return BadRequest(new { Error = "Caminhão não encontrado." });
+        if(truckDto.modelo != string.Empty) {
+            if(!truckDto.modelo.IsFM_FH()) return BadRequest(new { Error = "Tipo do modelo não informado." });
+            _truck.modelo = truckDto.modelo;
+        }
+        if(truckDto.anoModelo != string.Empty) {
+            if(!truckDto.anoModelo.IsYear()) return BadRequest(new { Error = "Ano do modelo precisam ser do valor de um ano." });
+            if(Int32.Parse(truckDto.anoModelo) > Int32.Parse(_truck.anoFabricacao))
+                return BadRequest(new { Error = "Ano do modelo não pode ser superior ao seu ano de fabricação." });
+            _truck.anoModelo = truckDto.anoModelo;
         }
         Truck? updatedTruck;
-        if((updatedTruck = await truckService.UpdateTruckByIdAsync(id, truck)) == null)
+        if((updatedTruck = await truckService.UpdateTruckByIdAsync(id, _truck)) == null)
             return BadRequest(new { Error = "Caminhão não encontrado." });
         return Ok(updatedTruck);
     }
