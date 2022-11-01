@@ -188,3 +188,9 @@ src/.vscode/*
 #migrations
 
 src/Migrations/*
+
+#test
+
+test/bin/*
+test/obj/*
+.vscode/*
