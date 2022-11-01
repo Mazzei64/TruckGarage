@@ -21,6 +21,8 @@ src/build/
 src/bld/
 src/[Bb]in/
 src/[Oo]bj/
+src/obj/*
+src/bin/*
 
 # Visual Studio 2015 cache/options directory
 src/.vs/
