@@ -24,6 +24,9 @@ public class TruckService : ITruckService {
     }
     public async Task<Truck?> UpdateTruckByIdAsync(long id, Truck truck) {
         Truck? dbTruck;
+        if((dbTruck = await this.FindTruckByIdAsync(id)) == null)
+            return null;
+
         dbTruck.modelo = truck.modelo;
         dbTruck.anoFabricacao = truck.anoFabricacao;
         dbTruck.anoModelo = truck.anoModelo;
