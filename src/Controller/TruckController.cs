@@ -18,7 +18,7 @@ public class TruckController : ControllerBase {
         return Ok(await truckService.ListTrucksAsync());
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<Truck>> GetTruckById(int id) {
+    public async Task<ActionResult<Truck>> GetTruckById(long id) {
         Truck? truck;
         if((truck = await truckService.FindTruckByIdAsync(id)) == null)
             return BadRequest(new { Error = "Caminhão não encontrado." });
@@ -36,7 +36,7 @@ public class TruckController : ControllerBase {
         return Ok(await truckService.CreateTruckAsync(truck));
     }
     [HttpPut("{id}")]
-    public async Task<ActionResult<Truck>> UpdateTruck(int id, TruckDto truckDto) {
+    public async Task<ActionResult<Truck>> UpdateTruck(long id, TruckDto truckDto) {
         Truck? _truck;
         if((_truck = await truckService.FindTruckByIdAsync(id)) == null)
             return BadRequest(new { Error = "Caminhão não encontrado." });
@@ -56,7 +56,7 @@ public class TruckController : ControllerBase {
         return Ok(updatedTruck);
     }
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Truck>> RemoveTruck(int id) {
+    public async Task<ActionResult<Truck>> RemoveTruck(long id) {
         Truck? deletedTruck;
         if((deletedTruck = await truckService.RemoveTruckByIdAsync(id)) == null)
             return BadRequest(new { Error = "Caminhão não existe dentro da base de dados." });

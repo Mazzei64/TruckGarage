@@ -17,10 +17,10 @@ public class TruckService : ITruckService {
         await _context.SaveChangesAsync();
         return truck;
     }
-    public async Task<Truck?> FindTruckByIdAsync(int id) {
+    public async Task<Truck?> FindTruckByIdAsync(long id) {
         return await _context.truckDb.FindAsync(id);
     }
-    public async Task<Truck?> UpdateTruckByIdAsync(int id, Truck truck) {
+    public async Task<Truck?> UpdateTruckByIdAsync(long id, Truck truck) {
         Truck? dbTruck;
         if((dbTruck = await this.FindTruckByIdAsync(id)) == null)
             return null;
@@ -33,7 +33,7 @@ public class TruckService : ITruckService {
 
         return dbTruck;
     }
-    public async Task<Truck?> RemoveTruckByIdAsync(int id) {
+    public async Task<Truck?> RemoveTruckByIdAsync(long id) {
         Truck? dbTruck;
         if((dbTruck = await this.FindTruckByIdAsync(id)) == null)
             return null;
