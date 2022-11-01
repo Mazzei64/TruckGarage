@@ -186,6 +186,7 @@ src/*.pfxsrc/
 #vs code
 
 src/.vscode/*
+TruckGarage/
 
 #migrations
 
