@@ -5,22 +5,23 @@ using TruckGarage.Entity;
 namespace TruckGarage.Service;
 
 public class TruckService : ITruckService {
-    private readonly IDataContext _context;
-    // private readonly DbSet<Truck> truckDb;
-    public TruckService(IDataContext context) {
+    private readonly DataContext _context;
+    public TruckService(DataContext context) {
         this._context = context;
-        _context.truckDb = this._context.Set<Truck>();
     }
     public async Task<List<Truck>?> ListTrucksAsync() {
         return await _context.Set<Truck>().ToListAsync();
     }
     public async Task<Truck?> CreateTruckAsync(Truck truck) {
-        await _context.truckDb.AddAsync(truck);
-        await _context.SaveChangesAsync();
+        using(_context) {
+            await _context.truckDb.AddAsync(truck);
+            await _context.SaveChangesAsync();
+        }
         return truck;
     }
     public async Task<Truck?> FindTruckByIdAsync(long id) {
-        return await _context.truckDb.FindAsync(id);
+        var truck = await _context.truckDb.FindAsync(id);
+        return truck;
     }
     public async Task<Truck?> UpdateTruckByIdAsync(long id, Truck truck) {
         Truck? dbTruck;
@@ -32,7 +33,6 @@ public class TruckService : ITruckService {
         dbTruck.anoModelo = truck.anoModelo;
 
         await _context.SaveChangesAsync();
-
         return dbTruck;
     }
     public async Task<Truck?> RemoveTruckAsync(Truck truck) {

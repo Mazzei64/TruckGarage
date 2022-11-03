@@ -13,7 +13,6 @@ builder.Services.AddDbContext<DataContext>( options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<ITruckService, TruckService>();
-builder.Services.AddScoped<IDataContext, DataContext>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
