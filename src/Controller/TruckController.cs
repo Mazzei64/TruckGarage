@@ -31,8 +31,8 @@ public class TruckController : ControllerBase {
         if(!truck.modelo.IsFM_FH()) return BadRequest(new { Error = "Tipo do modelo não informado." });
         truck.anoFabricacao = DateTime.Now.Year.ToString();
         if(!truck.anoModelo.IsYear()) return BadRequest(new { Error = "Ano do modelo precisam ser do valor de um ano." });
-        if(Int32.Parse(truck.anoModelo) > Int32.Parse(truck.anoFabricacao))
-            return BadRequest(new { Error = "Ano do modelo não pode ser superior ao seu ano de fabricação." });
+        if(Int32.Parse(truck.anoModelo) < Int32.Parse(truck.anoFabricacao))
+            return BadRequest(new { Error = "Ano do modelo não pode ser inferior ao seu ano de fabricação." });
         return Ok(await truckService.CreateTruckAsync(truck));
     }
     [HttpPut("{id}")]
