@@ -22,6 +22,8 @@
   
         cd TruckGarage ;
         dotnet build
+  
+    - Se você estiver em um sistema linux, considere rodar o script setup.sh. Porém, tenha certeza de que a sua ConnectionStrings (ver abaixo) está configurada. Caso contrário, o script irá falhar ao tentar atualizar o banco de dados com as migrações geradas.
       
   - Para configurar a conecção com o serviço de banco (postgresql):
   
