@@ -16,7 +16,7 @@
   
 ## Como executar o projeto
 
-### Pré-requisito: dotnet 6.0+
+### Pré-requisito: dotnet 6.0+  |  dotnet-ef 6.0+
   
   - Para configurar as dependências e compilar o projeto, basta digitar em sua linha de comando:
   
@@ -33,6 +33,16 @@
          }
     
        * Deve ser levado em consideração que este projeto foi desenvolvido com uma dependência para o serviço de gerenciamento de bancos de dados Postgresql. Com isso, a configuração desejada para o "ConnectionStrings" deve ser verdadeira para o acesso do serviço postgresql.
+       
+  - Para gerar migrações e atualizar o banco de dados:
+  
+    - Para gerar migrações:
+    
+          dotnet ef migrations add --project src/ <MIGRATION-NAME>
+          
+    - Para atualizar o banco de dados:
+    
+          dotnet ef database update --project src/ <MIGRATION-NAME>
        
   - Para rodar o projeto, basta digitar a partir da sua linha de comando:
   
